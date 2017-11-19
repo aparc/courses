@@ -16,5 +16,6 @@ public class App {
         myQueue.enqueue("Peace");
 
         myQueue.print();
+
     }
 }

@@ -4,11 +4,11 @@ public class ArrayQueue<T> implements CustomQueue<T> {
     private int rear;
     private int front;
     private int nElem;
-    private int maxSize;
+//    private int maxSize;
 
-    public ArrayQueue(int maxSize) {
-        this.maxSize = maxSize;
-        array = new Object[maxSize];
+    public ArrayQueue(int initialLength) {
+//        this.maxSize = maxSize;
+        array = new Object[initialLength];
         rear = -1;
         front = 0;
         nElem = 0;
@@ -65,5 +65,9 @@ public class ArrayQueue<T> implements CustomQueue<T> {
 
     public boolean isEmpty() { // check queue empty
         return (nElem == 0);
+    }
+
+    public int getnElem() {
+        return nElem;
     }
 }
