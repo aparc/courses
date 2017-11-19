@@ -43,7 +43,11 @@ public class ArrayQueue<T> implements CustomQueue<T> {
 
     public T dequeue() {
         if(isEmpty()) {
-            System.out.println("Queue is empty");
+            try {
+                throw new EmptyQueueException();
+            } catch (EmptyQueueException e) {
+                System.out.println("Queue is empty.");
+            }
         }
         T temp = (T) array[front++];
         front = (front == array.length) ? 0 : front; // cyclic transfer
@@ -69,5 +73,8 @@ public class ArrayQueue<T> implements CustomQueue<T> {
 
     public int getnElem() {
         return nElem;
+    }
+    public Object[] getArray() {
+        return array;
     }
 }
