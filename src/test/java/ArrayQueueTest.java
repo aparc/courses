@@ -13,7 +13,7 @@ public class ArrayQueueTest {
         queue.enqueue(var);
 
         // then
-        Assertions.assertTrue(queue.getnElem() == 1);
+        Assertions.assertTrue(queue.getElem() == 1);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ArrayQueueTest {
         queue.dequeue();
 
         //then
-        Assertions.assertTrue(queue.getnElem() == 1);
+        Assertions.assertTrue(queue.getElem() == 1);
 
     }
 
