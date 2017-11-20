@@ -51,6 +51,24 @@ public class ArrayQueueTest {
 
         //then
         Assertions.assertTrue(queue.getElem() == 1);
+    }
+
+    @Test
+    public void testEnqueue_validParams_expandQueueCyclicTransferCase(){
+        //setup
+        int initialLength = 3;
+        ArrayQueue queue = new ArrayQueue(initialLength);
+
+        //when
+        queue.enqueue("test1");
+        queue.enqueue("test2");
+        queue.enqueue("test3");
+        queue.dequeue();
+        queue.enqueue("test4");
+        queue.enqueue("test5");
+
+        //then
+        Assertions.assertTrue(queue.getArray().length > initialLength);
 
     }
 

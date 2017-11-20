@@ -74,6 +74,7 @@ public class ArrayQueue<T> implements CustomQueue<T> {
     public int getElem() {
         return nElem;
     }
+
     public Object[] getArray() {
         return array;
     }
