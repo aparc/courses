@@ -1,3 +1,5 @@
+package queue;
+
 public class ArrayQueue<T> implements CustomQueue<T> {
 
     private Object[] array;

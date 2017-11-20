@@ -1,3 +1,5 @@
+package queue;
+
 public interface CustomQueue<T> {
 
     void enqueue(T value);
