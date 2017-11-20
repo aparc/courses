@@ -20,7 +20,7 @@ public class LoginProcessor {
             final Login annotation = field.getAnnotation(Login.class);
             if(annotation != null) {
                 StringBuilder builder = new StringBuilder();
-                builder.append(annotation.line());
+                builder.append(testObject.getName());
                 field.setAccessible(true);
                 field.set(testObject, builder.reverse().toString());
             }

@@ -1,10 +1,15 @@
 package annotation;
 
 public class SampleClass {
-    String name;
 
-    @Login(line = "qwerty")
-    String login;
+    private String name;
+
+    @Login()
+    private String login;
+
+    public SampleClass(String name){
+        this.name = name;
+    }
 
     public String getName() {
         return name;
