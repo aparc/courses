@@ -42,18 +42,15 @@ public class ArrayQueueTest {
     @Test
     public void testDequeue_validParams_removeItemFromQueue() {
         // setup
-        int initialLength = 3;
+        int initialLength = 1;
         ArrayQueue queue = new ArrayQueue<String>(initialLength);
         queue.enqueue("test1");
-        queue.enqueue("test2");
-        queue.enqueue("test3");
 
         // when
-        queue.dequeue();
-        queue.dequeue();
+        String result = (String) queue.dequeue();
 
         //then
-        Assertions.assertTrue(queue.getElem() == 1);
+        Assertions.assertTrue(result.equals("test1"));
     }
 
     @Test
