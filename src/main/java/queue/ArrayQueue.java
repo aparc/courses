@@ -6,10 +6,8 @@ public class ArrayQueue<T> implements CustomQueue<T> {
     private int rear;
     private int front;
     private int nElem;
-//    private int maxSize;
 
     public ArrayQueue(int initialLength) {
-//        this.maxSize = maxSize;
         array = new Object[initialLength];
         rear = -1;
         front = 0;
@@ -66,11 +64,11 @@ public class ArrayQueue<T> implements CustomQueue<T> {
 
 
     public boolean isFull() { // check queue overflow
-        return (nElem == array.length);
+        return nElem == array.length;
     }
 
     public boolean isEmpty() { // check queue empty
-        return (nElem == 0);
+        return nElem == 0;
     }
 
     public int getElem() {
