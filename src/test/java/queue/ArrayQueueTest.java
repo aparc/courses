@@ -7,14 +7,7 @@ import org.junit.jupiter.api.Test;
 
 public class ArrayQueueTest {
 
-    private ArrayQueue queue;
-    private int initialLength;
-
-    @BeforeEach
-    public void initializeQueue(){
-        initialLength = 3;
-        queue = new ArrayQueue(initialLength);
-    }
+    private final ArrayQueue queue = new ArrayQueue(3);
 
     @Test
     @DisplayName("Добавление элемента в очередь")
@@ -41,7 +34,7 @@ public class ArrayQueueTest {
         queue.enqueue(var3);
         queue.enqueue(var4);
 
-        Assertions.assertTrue(queue.getArray().length > initialLength);
+        Assertions.assertTrue(queue.getArray().length > 3);
     }
 
     @Test
@@ -65,7 +58,7 @@ public class ArrayQueueTest {
         queue.enqueue("test4");
         queue.enqueue("test5");
 
-        Assertions.assertTrue(queue.getArray().length > initialLength);
+        Assertions.assertTrue(queue.getArray().length > 3);
 
     }
 
