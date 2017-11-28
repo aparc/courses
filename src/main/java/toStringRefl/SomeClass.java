@@ -11,4 +11,5 @@ public class SomeClass {
         line = "quqq";
         obj = new Object();
     }
+
 }

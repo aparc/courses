@@ -4,6 +4,6 @@ public class App {
 
     public static void main(String[] args) throws IllegalAccessException {
 
-        StringUtils.toString(new SomeClass());
+        System.out.println(StringUtils.toString(new SomeClass()));
     }
 }
