@@ -1,0 +1,50 @@
+use onlineshop;
+
+drop table if exists product;
+drop table if exists productCategory;
+drop table if exists productAndProducer;
+drop table if exists producer;
+
+create table if not exists productCategory(
+	categoryId int primary key auto_increment,
+    name varchar(30) not null unique
+);
+
+create table if not exists product(
+	productId int primary key,
+    name varchar(50) not null unique,
+    weight double,
+    categoryId_fk int not null,
+    foreign key (categoryId_fk) references productCategory(categoryId)
+);
+
+create table if not exists producer(
+	producerId int primary key auto_increment,
+    name varchar(100) unique not null,
+    address varchar(200) not null
+);
+
+create table if not exists productAndProducer(
+	productId int not null,
+    producerId int not null,
+    constraint productId_producerId_pk primary key (productId, producerId),
+    foreign key (productId) references product(productId),
+    foreign key (producerId) references producer(producerId)
+);
+
+
+insert into productCategory(name)
+values
+	("Auto"),
+    ("Mobiles"),
+    ("Monitors");
+
+insert into product
+values
+	(1, "Laptop", 3.45, 3),
+    (2, "Iphone", 1.2, 2),
+    (3, "s8", 0.9, 2),
+    (4, "Lada Granta", 1200, 1);
+
+select * from product;
+select * from productCategory;
