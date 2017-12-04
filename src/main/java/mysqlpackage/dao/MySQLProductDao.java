@@ -2,6 +2,9 @@ package mysqlpackage.dao;
 
 import mysqlpackage.JdbcUtils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,10 +16,20 @@ public class MySQLProductDao implements ProductDao {
     private String login;
     private String password;
 
-    public MySQLProductDao(String databaseName, String login, String password) {
-        this.databaseName = databaseName;
-        this.login = login;
-        this.password = password;
+    public MySQLProductDao() {
+        authorize();
+    }
+
+    private void authorize(){
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            this.databaseName = reader.readLine();
+            this.login = reader.readLine();
+            this.password = reader.readLine();
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
