@@ -4,12 +4,16 @@ public class SomeClass {
 
     private int number;
     private String line;
-    private Object obj;
+    private User user;
 
     {
         number = 1;
         line = "quqq";
-        obj = new Object();
+        user = new User();
     }
 
+    public static class User{
+        private int id = 6;
+        private String str = "abs";
+    }
 }
