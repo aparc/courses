@@ -1,13 +1,17 @@
 package mysqlpackage.dao;
 
+import mysqlpackage.domain.Product;
+
+import java.util.List;
+
 public interface ProductDao {
-    void create(int productId, String name, double weight, int categoryId_fk);
+    Product create(int productId, String name, double weight, int categoryId_fk);
 
-    void getAll();
+    List<Product> getAll();
 
-    void getById(int productId);
+    Product getById(int productId);
 
-    void update(int productId, String name, double weight, int categoryId_fk);
+    Product update(int productId, String name, double weight, int categoryId_fk);
 
     void delete(int productId);
 }
