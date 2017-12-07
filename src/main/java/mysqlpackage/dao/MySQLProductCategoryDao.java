@@ -1,19 +1,25 @@
 package mysqlpackage.dao;
 
+import mysqlpackage.ConnectionFactory;
 import mysqlpackage.JdbcUtils;
+import mysqlpackage.domain.ProductCategory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MySQLProductCategoryDao implements ProductCategoryDao {
 
+    private final ConnectionFactory connectionFactory;
     private String databaseName;
     private String login;
     private String password;
 
-    public MySQLProductCategoryDao() {
+    public MySQLProductCategoryDao(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
         authorize();
     }
 
@@ -30,59 +36,65 @@ public class MySQLProductCategoryDao implements ProductCategoryDao {
     }
 
     @Override
-    public void create(String name) {
-        try (Connection connection = JdbcUtils.getConnection(databaseName, login, password)) {
+    public ProductCategory create(String name) {
+        try (Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
             Statement statement = connection.createStatement();
             int rowUpdated =  statement.executeUpdate("insert into productCategory(name) values(\"" + name + "\")");
             System.out.println("row(s) affected = " + rowUpdated);
+
+            ResultSet result = statement.executeQuery("select * from productCategory where name = \"" + name + "\"");
+            result.next();
+            return new ProductCategory(result.getInt(1), result.getString(2));
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void getAll() {
-        try(Connection connection = JdbcUtils.getConnection(databaseName, login, password)) {
+    public List<ProductCategory> getAll() {
+        final List<ProductCategory> list = new ArrayList();
+        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery("select * from productCategory order by categoryId asc");
             while(result.next()) {
-                System.out.println("ID = " + result.getInt(1) +
-                        ", name = " + result.getString(2));
+                list.add(new ProductCategory(result.getInt(1), result.getString(2)));
             }
+            return list;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void getById(int categoryId) {
-        try(Connection connection = JdbcUtils.getConnection(databaseName, login, password)) {
+    public ProductCategory getById(int categoryId) {
+        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery
                     ("select * from productCategory where categoryId = " + categoryId);
-            while(result.next()) {
-                System.out.println("ID = " + result.getInt(1) + ", name = " + result.getString(2));
-            }
+            result.next();
+            return new ProductCategory(result.getInt(1), result.getString(2));
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void update(int categoryId, String name) {
-        try(Connection connection = JdbcUtils.getConnection(databaseName, login, password)) {
+    public ProductCategory update(int categoryId, String name) {
+        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate
                     ("update productCategory set name = \"" + name + "\" where categoryId = " + categoryId);
             System.out.println("row(s) affected = " + rowUpdated);
+            ResultSet result = statement.executeQuery("select * from productCategory where categoryId = " + categoryId);
+            return new ProductCategory(result.getInt(1), result.getString(2));
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void delete(int categoryId) {
-        try(Connection connection = JdbcUtils.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate("delete from productCategory where categoryId = " + categoryId);
             System.out.println("row(s) affected = " + rowUpdated);

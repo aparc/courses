@@ -1,14 +1,18 @@
 package mysqlpackage.dao;
 
+import mysqlpackage.domain.Producer;
+
+import java.util.List;
+
 public interface ProducerDao {
 
-    void create(String name, String address);
+    Producer create(String name, String address);
 
-    void getAll();
+    List<Producer> getAll();
 
-    void getById(int producerId);
+    Producer getById(int producerId);
 
-    void update(int producerId, String name, String address);
+    Producer update(int producerId, String name, String address);
 
     void delete(int producerId);
 }

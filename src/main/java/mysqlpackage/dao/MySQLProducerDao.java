@@ -1,6 +1,8 @@
 package mysqlpackage.dao;
 
+import mysqlpackage.ConnectionFactory;
 import mysqlpackage.JdbcUtils;
+import mysqlpackage.domain.Producer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,9 +11,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MySQLProducerDao implements ProducerDao {
 
+    private final ConnectionFactory connectionFactory;
     private String databaseName;
     private String login;
     private String password;
@@ -22,7 +27,8 @@ public class MySQLProducerDao implements ProducerDao {
 //        this.password = password;
 //    }
 
-    public MySQLProducerDao() {
+    public MySQLProducerDao(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
         authorize();
     }
 
@@ -39,61 +45,65 @@ public class MySQLProducerDao implements ProducerDao {
     }
 
     @Override
-    public void create(String name, String address) {
-        try(Connection connection = JdbcUtils.getConnection(databaseName, login, password)) {
+    public Producer create(String name, String address) {
+        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate
                     ("insert into producer(name, address) values(\"" + name + "\", " + address + "\")");
             System.out.println("row(s) affected = " + rowUpdated);
+            ResultSet result = statement.executeQuery("select * from producer where name = \"" + name + "\"");
+            result.next();
+            return new Producer(result.getInt(1), result.getString(2), result.getString(3));
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void getAll() {
-        try(Connection connection = JdbcUtils.getConnection(databaseName, login, password)) {
+    public List<Producer> getAll() {
+        final List<Producer> list = new ArrayList<>();
+        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery("select * from producer order by producerId asc");
             while(result.next()) {
-                System.out.println("producerId = " + result.getInt(1) +
-                        ", name = " + result.getString(2) + ", adress = " + result.getString(3));
+                list.add(new Producer(result.getInt(1), result.getString(2), result.getString(3)));
             }
+            return list;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void getById(int producerId) {
-        try(Connection connection = JdbcUtils.getConnection(databaseName, login, password)) {
+    public Producer getById(int producerId) {
+        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery
                     ("select * from producer where producerId = " + producerId);
-            while(result.next()) {
-                System.out.println("producerId = " + result.getInt(1) + ", name = " + result.getString(2) +
-                ", address = " + result.getString(3));
-            }
+            result.next();
+            return new Producer(result.getInt(1), result.getString(2), result.getString(3));
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void update(int producerId, String name, String address) {
-        try(Connection connection = JdbcUtils.getConnection(databaseName, login, password)) {
+    public Producer update(int producerId, String name, String address) {
+        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate
                     ("update producer set name = \"" + name + "\", address = \"" + address + "\" where producerId = " + producerId);
             System.out.println("row(s) affected = " + rowUpdated);
+            ResultSet result = statement.executeQuery("select * from producer where producerId = " + producerId);
+            return new Producer(result.getInt(1), result.getString(2), result.getString(3));
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void delete(int producerId) {
-        try(Connection connection = JdbcUtils.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate("delete from producer where producerId = " + producerId);
             System.out.println("row(s) affected = " + rowUpdated);
