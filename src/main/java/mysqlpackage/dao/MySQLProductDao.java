@@ -17,30 +17,30 @@ import java.util.List;
 public class MySQLProductDao implements ProductDao {
 
     private final ConnectionFactory connectionFactory;
-    private String databaseName;
-    private String login;
-    private String password;
+//    private String databaseName;
+//    private String login;
+//    private String password;
 
     public MySQLProductDao(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
-        authorize();
+//        authorize();
     }
 
-    private void authorize(){
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            this.databaseName = reader.readLine();
-            this.login = reader.readLine();
-            this.password = reader.readLine();
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void authorize(){
+//        try {
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//            this.databaseName = reader.readLine();
+//            this.login = reader.readLine();
+//            this.password = reader.readLine();
+//            reader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public Product create(int productId, String name, double weight, int categoryId_fk) {
-        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection()) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate
                     ("insert into product values(" + productId + ", \"" + name + "\"" + ", " + weight + ", " + categoryId_fk + ")");
@@ -56,7 +56,7 @@ public class MySQLProductDao implements ProductDao {
     @Override
     public List<Product> getAll() {
         final List<Product> list = new ArrayList<>();
-        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery("select * from product");
             while (result.next()) {
@@ -70,7 +70,7 @@ public class MySQLProductDao implements ProductDao {
 
     @Override
     public Product getById(int productId) {
-        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery("select * from product where productId = " + productId);
             result.next();
@@ -82,7 +82,7 @@ public class MySQLProductDao implements ProductDao {
 
     @Override
     public Product update(int productId, String name, double weight, int categoryId_fk) {
-        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection()) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate
                     ("update product set name = \"" + name + "\", weight = " + weight + ", categoryId_fk = " + categoryId_fk + " where productId = " + productId);
@@ -97,7 +97,7 @@ public class MySQLProductDao implements ProductDao {
 
     @Override
     public void delete(int productId) {
-        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection()) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate("delete from product where productId = " + productId);
             System.out.println("row(s) affected = " + rowUpdated);

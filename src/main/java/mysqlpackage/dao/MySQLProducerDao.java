@@ -17,9 +17,9 @@ import java.util.List;
 public class MySQLProducerDao implements ProducerDao {
 
     private final ConnectionFactory connectionFactory;
-    private String databaseName;
-    private String login;
-    private String password;
+//    private String databaseName;
+//    private String login;
+//    private String password;
 
 //    public MySQLProducerDao(String databaseName, String login, String password) {
 //        this.databaseName = databaseName;
@@ -29,24 +29,24 @@ public class MySQLProducerDao implements ProducerDao {
 
     public MySQLProducerDao(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
-        authorize();
+//        authorize();
     }
 
-    private void authorize(){
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            this.databaseName = reader.readLine();
-            this.login = reader.readLine();
-            this.password = reader.readLine();
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void authorize(){
+//        try {
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//            this.databaseName = reader.readLine();
+//            this.login = reader.readLine();
+//            this.password = reader.readLine();
+//            reader.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @Override
     public Producer create(String name, String address) {
-        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection()) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate
                     ("insert into producer(name, address) values(\"" + name + "\", " + address + "\")");
@@ -62,7 +62,7 @@ public class MySQLProducerDao implements ProducerDao {
     @Override
     public List<Producer> getAll() {
         final List<Producer> list = new ArrayList<>();
-        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery("select * from producer order by producerId asc");
             while(result.next()) {
@@ -76,7 +76,7 @@ public class MySQLProducerDao implements ProducerDao {
 
     @Override
     public Producer getById(int producerId) {
-        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection()) {
             Statement statement = connection.createStatement();
             ResultSet result = statement.executeQuery
                     ("select * from producer where producerId = " + producerId);
@@ -89,7 +89,7 @@ public class MySQLProducerDao implements ProducerDao {
 
     @Override
     public Producer update(int producerId, String name, String address) {
-        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection()) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate
                     ("update producer set name = \"" + name + "\", address = \"" + address + "\" where producerId = " + producerId);
@@ -103,7 +103,7 @@ public class MySQLProducerDao implements ProducerDao {
 
     @Override
     public void delete(int producerId) {
-        try(Connection connection = connectionFactory.getConnection(databaseName, login, password)) {
+        try(Connection connection = connectionFactory.getConnection()) {
             Statement statement = connection.createStatement();
             int rowUpdated = statement.executeUpdate("delete from producer where producerId = " + producerId);
             System.out.println("row(s) affected = " + rowUpdated);

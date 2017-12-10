@@ -6,8 +6,8 @@ public class Application {
 
     public static void main(String[] args) {
 
-        ProductCategoryDao dao1 = new MySQLProductCategoryDao();
-        dao1.getAll();
+//        ProductCategoryDao dao1 = new MySQLProductCategoryDao();
+//        dao1.getAll();
 
 //        ProducerDao dao2 = new MySQLProducerDao();
 //        ProductDao dao = new MySQLProductDao();
