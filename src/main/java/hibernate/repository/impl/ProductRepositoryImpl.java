@@ -6,7 +6,9 @@ import hibernate.repository.TransactionOperation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRepositoryImpl implements ProductRepository {
@@ -35,8 +37,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     public List<Product> getAll() {
         final Session session = factory.openSession();
         return (List<Product>) doInTransaction(session, () -> {
-            List<Product> list = session.createQuery("from Product order by productId").list();
-            return list;
+            Query<Product> query = session.createQuery("from Product");
+            return query.getResultList();
         });
     }
 
