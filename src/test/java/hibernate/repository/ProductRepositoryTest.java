@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class ProductRepositoryTest {
@@ -60,13 +61,62 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void getAll() {
-
+    public void testGetAll() {
         when(session.createQuery(Matchers.anyString())).thenReturn(query);
-        when(query.getResultList()).thenReturn(new ArrayList<Product>());
+        when(query.getResultList()).thenReturn(new ArrayList<Product>()); // ?!
         List<Product> list = repository.getAll();
 
         assertNotNull(list);
         verify(session).createQuery(Matchers.anyString());
+        verify(transaction).commit();
+        verify(session).close();
+    }
+
+    @Test
+    public void testFindById() {
+        Product product = new Product();
+        product.setProductId(15);
+        product.setName("Tea");
+        product.setWeight(0.15d);
+        int id = 15;
+
+        when(session.find(Product.class, id)).thenReturn(product);
+        Product result = repository.findById(id);
+
+        assertEquals(id, result.getProductId());
+        assertEquals(product.getName(), result.getName());
+        assertEquals(product.getWeight(), result.getWeight());
+
+        verify(session).find(Product.class, id);
+        verify(transaction).commit();
+        verify(session).close();
+    }
+
+    @Test
+    public void testUpdate() {
+        int id = 5;
+        String name = "Mouse";
+        double weight = 0.20d;
+
+        Product result = repository.update(id, name, weight);
+        assertEquals(id, result.getProductId());
+        assertEquals(name, result.getName());
+        assertEquals(weight, result.getWeight());
+
+        verify(session).update(Matchers.any(Product.class));
+        verify(transaction).commit();
+        verify(session).close();
+    }
+
+    @Test
+    public void testRemove() {
+        int id = 5;
+
+        when(session.createQuery(Matchers.anyString()).setParameter(Matchers.anyString(), id).executeUpdate()).thenReturn(1); //?!
+        int result = repository.remove(id);
+        assertTrue(result == 1);
+
+        verify(transaction).commit();
+        verify(session).close();
     }
 }
