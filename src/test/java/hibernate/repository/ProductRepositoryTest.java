@@ -110,9 +110,10 @@ public class ProductRepositoryTest {
 
     @Test
     public void testRemove() {
-        int id = 5;
+        int id = 6;
 
         when(session.createQuery(Matchers.anyString()).setParameter(Matchers.anyString(), id).executeUpdate()).thenReturn(1); //?!
+
         int result = repository.remove(id);
         assertTrue(result == 1);
 

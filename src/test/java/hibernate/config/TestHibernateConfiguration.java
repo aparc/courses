@@ -10,7 +10,7 @@ import org.hibernate.service.ServiceRegistry;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestHibernateConiguration {
+public class TestHibernateConfiguration {
 
     private static SessionFactory factory;
 
