@@ -70,12 +70,16 @@ public class ProductRepositoryImpl implements ProductRepository {
 //        });
     }
 
+    @Override
     public int remove(int id) {
         final Session session = factory.openSession();
-        return (Integer) doInTransaction(session, () -> session.createQuery("delete from Product where productId = :productId")
-                .setParameter("productId", id).executeUpdate());
+        return (Integer) doInTransaction(session, () -> {
+            Query query = session.
+                    createQuery("delete from Product where productId = :productId").
+                    setParameter("productId", id);
+            return query.executeUpdate();
+        });
     }
-
 
     private Object doInTransaction(Session session, TransactionOperation operation) {
         final Transaction transaction = session.beginTransaction();
