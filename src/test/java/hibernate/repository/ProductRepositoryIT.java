@@ -37,7 +37,6 @@ public class ProductRepositoryIT {
     @Test
     public void testGetAll() {
         List<Product> list = repository.getAll();
-
         assertTrue(list.size() > 0);
     }
 
@@ -56,7 +55,24 @@ public class ProductRepositoryIT {
     }
 
     @Test
-    public void testFindById_entityNotExists() {}
+    public void testFindById_entityNotExists() {
+        Product product = repository.findById(7);
+        assertNull(product);
+    }
+
+    @Test
+    public void testUpdate() {
+        int id = 19;
+        String name = "Spoon";
+        double weight = 0.23;
+        repository.createProduct(19, "Spon", 0.56);
+
+        Product product = repository.update(id, name, weight);
+
+        assertEquals(id, product.getProductId());
+        assertEquals(name, product.getName());
+        assertEquals(weight, product.getWeight());
+    }
 
     @Test
     public void testRemove() {
